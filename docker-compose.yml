@@ -1,0 +1,67 @@
+services:
+  # Single image runs nginx + php-fpm + queue worker(s) + scheduler via supervisord
+  # (see docker/supervisord.conf). Scale workers with QUEUE_WORKERS.
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    image: ghcr.io/magicstack-llp/city-app-laravel:latest
+    container_name: city-app-laravel
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:80"
+    env_file:
+      - .env
+    environment:
+      QUEUE_WORKERS: ${QUEUE_WORKERS:-2}
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./database:/var/www/html/database
+      - ./public:/var/www/html/public
+      - ./.env:/var/www/html/.env
+    networks:
+      - city-app-network
+    # Give queue workers time to finish in-flight jobs on shutdown (must exceed
+    # queue:work --timeout in supervisord.conf).
+    stop_grace_period: 120s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: PostgreSQL database
+  # postgres:
+  #   image: postgres:18-alpine
+  #   container_name: city-app-postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_DATABASE:-city_app}
+  #     POSTGRES_USER: ${DB_USER:-city_app}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - city-app-network
+  #   ports:
+  #     - "${DB_PORT:-5432}:5432"
+
+  # Optional: Redis for caching/queues
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: city-app-redis
+  #   restart: unless-stopped
+  #   networks:
+  #     - city-app-network
+  #   ports:
+  #     - "${REDIS_PORT:-6379}:6379"
+
+networks:
+  city-app-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
+

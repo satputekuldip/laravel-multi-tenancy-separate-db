@@ -1,0 +1,61 @@
+---
+alwaysApply: true
+---
+<constitution-and-stack-rules>
+
+# Constitution First & Laravel–Inertia–React Rules
+
+## Read the Constitution First
+
+- **Before starting any feature, refactor, or implementation task**, read the project Constitution: `.specify/memory/constitution.md`.
+- Treat the Constitution as the **source of truth** for code quality, testing, UX, performance, documentation, and development hygiene. Do not contradict it.
+- If the user's request conflicts with the Constitution, follow the Constitution and briefly explain the conflict.
+
+---
+
+## Strict Implementation Rules (Laravel + Inertia + React)
+
+### Laravel (Backend)
+
+- **Controllers**: Keep thin. No business logic in controllers—delegate to Services, Actions, or Form Requests. Controllers only: validate (via Form Request), call service/action, return response (e.g. `Inertia::render()`, `redirect()`, JSON).
+- **Validation**: Always use a **Form Request** class for any request that has validation rules. No inline `$request->validate()` in controllers. Reuse or extend existing Form Requests; check sibling requests for array vs string rules.
+- **Database**: Use **Eloquent** (models, relationships, scopes). No raw `DB::` or SQL unless explicitly required for a complex query—prefer query builder or Eloquent. **Zero N+1**: eager load with `with()` / `load()`.
+- **Models**: Use **constructor property promotion** and explicit **return types** on methods. Define relationships with return type hints. Use `casts()` method or `$casts` per project convention.
+- **API controllers**: All API endpoints must have **Scribe** annotations: `@group`, `@bodyParam` / `@queryParam` / `@urlParam`, `@response` (success and errors). Response examples must **not** leave arrays/objects empty (attachments, documents, etc. must have at least one example item). After editing API docs, run `php artisan scribe:generate`.
+- **Routes**: Use **named routes** and `route()` for URLs. Prefer resource routes where appropriate.
+- **Config**: Use `config('key')` only; never `env()` outside config files.
+- **PHP**: Run **`vendor/bin/pint --dirty`** after editing PHP files.
+
+### Inertia (Bridge)
+
+- **Rendering**: Use **`Inertia::render()`** for page responses (no Blade views for SPA pages). Pass only the props the page needs; avoid dumping entire models when a resource or array is enough.
+- **Shared data**: Add app-wide or layout props only in **HandleInertiaRequests** (e.g. auth user, flash, permissions). Do not add one-off shared props in individual controllers unless they are truly global.
+- **Navigation**: Use **`<Link>`** from `@inertiajs/react` for in-app links. Use **`router.visit()`** for programmatic navigation (e.g. after submit). No raw `<a href="...">` for internal routes.
+- **Forms**: Prefer the Inertia **`<Form>`** component with `action`/`method` (or Wayfinder `.form()`). For complex flows, `useForm` is acceptable. Ensure `resetOnError` / `resetOnSuccess` / `setDefaultsOnSuccess` are used only if supported by the current Inertia/Form version (check docs).
+- **Props**: Page components must receive **typed props**. Define TypeScript interfaces/types for page props; do not use `any` for props.
+- **Method spoofing**: For PATCH/PUT/DELETE, use `method="post"` with a hidden `_method` field inside the form (Laravel method spoofing). Do not rely on `method="patch"` in HTML if it causes the body to be dropped in the browser.
+
+### React (Frontend)
+
+- **Components**: **Functional components** only. Use hooks (useState, useEffect, etc.); no class components.
+- **TypeScript**: **Strict mode** only. Type all props, event handlers, and return values. No `any` unless justified and commented.
+- **Styling**: Use **Tailwind CSS** only. Use existing design tokens/theme (e.g. `@theme` in CSS); no arbitrary hex/rgb in class names unless already in the theme. Match existing patterns (gap vs margin, dark mode if used).
+- **State**: Prefer local state and Inertia's form/visit for server state. Use existing context or patterns if the codebase has them; do not introduce new global state libraries without approval.
+- **Feedback**: Every user action (submit, delete, etc.) must have **loading state** and **success/error feedback** (toast, message, or inline error). Empty lists/tables must have a clear **empty state**.
+- **Accessibility**: Use semantic HTML and ARIA where relevant (e.g. labels, roles, aria-disabled). Buttons for actions, links for navigation.
+- **Imports**: Keep imports at the top of the file. Reuse existing UI components from the project before adding new ones.
+- **Lint/Format**: Code must pass **ESLint** and **Prettier**; fix any reported issues before finalizing.
+
+### Testing
+
+- **Every feature or bugfix** must be covered by tests. Prefer **Feature** tests over Unit tests for HTTP/Inertia flows.
+- Use **factories** for models; no hard-coded IDs or manual DB inserts unless necessary. Follow existing test structure and naming.
+- Run the **minimum relevant tests** after changes (e.g. `php artisan test --filter=...`). Before marking work complete, ensure affected tests pass.
+
+### Documentation & Changelog
+
+- **CHANGELOG.md**: Update on every completed user story or significant change. On release: add `## [x.y.z] - YYYY-MM-DD` with Added/Changed/Fixed and update both link blocks at the bottom.
+- **API (Scribe)**: As above—full annotations and non-empty response examples; run `php artisan scribe:generate` after changes.
+- **Specs**: Keep `specs/` in sync with implementation. Do not remove or contradict spec content without explicit approval.
+
+</constitution-and-stack-rules>

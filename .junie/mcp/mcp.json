@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/opt/homebrew/Cellar/php@8.2/8.2.29_2/bin/php",
+            "args": [
+                "/Volumes/AirBackup/Workspace/PhpstormProjects/city-app-laravel/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

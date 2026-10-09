@@ -1,0 +1,221 @@
+name: Permissions
+description: |-
+
+  APIs for listing permissions, roles, current user permissions, and checking a single permission.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/api/permissions
+    metadata:
+      custom: []
+      groupName: Permissions
+      groupDescription: |-
+
+        APIs for listing permissions, roles, current user permissions, and checking a single permission.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all permissions'
+      description: 'Returns all permissions with id, name, guard_name, and timestamps.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"permissions":[{"id":1,"name":"users.view","guard_name":"web","created_at":"2024-01-01T00:00:00.000000Z","updated_at":"2024-01-01T00:00:00.000000Z"}]}'
+        headers: []
+        description: success
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: unauthenticated
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/api/permissions/roles
+    metadata:
+      custom: []
+      groupName: Permissions
+      groupDescription: |-
+
+        APIs for listing permissions, roles, current user permissions, and checking a single permission.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all roles with their permissions'
+      description: 'Returns all roles with id, name, guard_name, permissions (array of permission names), and timestamps.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"roles":[{"id":1,"name":"admin","guard_name":"web","permissions":["users.view","users.create"],"created_at":"2024-01-01T00:00:00.000000Z","updated_at":"2024-01-01T00:00:00.000000Z"}]}'
+        headers: []
+        description: success
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: unauthenticated
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/api/permissions/user
+    metadata:
+      custom: []
+      groupName: Permissions
+      groupDescription: |-
+
+        APIs for listing permissions, roles, current user permissions, and checking a single permission.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get current user's permissions and roles"
+      description: "Returns the authenticated user's permissions, role names, and direct permissions."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"permissions":["users.view","users.create"],"roles":["admin"],"direct_permissions":[]}'
+        headers: []
+        description: success
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: unauthenticated
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/api/permissions/check
+    metadata:
+      custom: []
+      groupName: Permissions
+      groupDescription: |-
+
+        APIs for listing permissions, roles, current user permissions, and checking a single permission.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Check if current user has a permission'
+      description: 'Returns allowed true/false for the given permission name.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      permission:
+        custom: []
+        name: permission
+        description: 'The permission name to check (e.g. users.view).'
+        required: true
+        example: users.view
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      permission: users.view
+    bodyParameters:
+      permission:
+        custom: []
+        name: permission
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      permission: b
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"allowed":true}'
+        headers: []
+        description: allowed
+      -
+        custom: []
+        status: 200
+        content: '{"allowed":false}'
+        headers: []
+        description: denied
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: unauthenticated
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The permission field is required.","errors":{"permission":["The permission field is required."]}}'
+        headers: []
+        description: 'validation error'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

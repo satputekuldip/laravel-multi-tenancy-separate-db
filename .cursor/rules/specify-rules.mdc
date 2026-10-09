@@ -1,0 +1,42 @@
+# laravel-app Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-12-18
+
+## Active Technologies
+- PHP 8.2+ (Laravel 12), TypeScript (Inertia React) (003-birth-death-services)
+- PostgreSQL (primary), S3/Local (for documents) (003-birth-death-services)
+- PostgreSQL (users table extended with firebase_uid, phone, country_code) (004-firebase-auth)
+- PHP 8.2+ (Laravel 12), TypeScript (Inertia React 2) (005-grievance-service)
+- PostgreSQL, S3/Local (documents and certificates) (005-grievance-service)
+- PHP 8.2+ + Laravel 12, Inertia.js 2, React 19, TypeScript 5.7, Tailwind CSS 4 (006-division-of-property-into-subdivision)
+- PostgreSQL (production), SQLite/PostgreSQL (dev). New: `division_of_property_into_subdivision_entries`; migration to add `document_type` to `service_entry_documents`. (006-division-of-property-into-subdivision)
+- PHP 8.2.29, Laravel 12 + Laravel Fortify (authentication), Spatie Laravel Permission or equivalent RBAC (for admin access control), Eloquent ORM, Inertia.js 2 (React 19, TypeScript) for admin UI, Tailwind CSS 4 for styling (008-important-places)
+- Existing relational database (PostgreSQL in production) with new tables/columns for Important Place Categories and Important Places related to City (008-important-places)
+- PHP 8.2+ + Laravel 12, Inertia.js 2, React 19, TypeScript 5.7, Tailwind CSS 4, Spatie Laravel Permission, Spatie Laravel Activity Log (001-initial-project-setup)
+- PostgreSQL (production), SQLite/PostgreSQL (dev); Eloquent ORM (001-initial-project-setup)
+
+- PHP 8.2.29, Laravel 12 + Laravel Fortify (authentication), Spatie Laravel Permission (RBAC), Spatie Laravel Media Library (file management), Spatie Laravel Activity Log (audit logging), Laravel Sanctum (API token authentication - to be added) (001-service-applications)
+
+## Project Structure
+
+```text
+src/
+tests/
+```
+
+## Commands
+
+# Add commands for PHP 8.2.29, Laravel 12
+
+## Code Style
+
+PHP 8.2.29, Laravel 12: Follow standard conventions
+
+## Recent Changes
+- 001-initial-project-setup: Added PHP 8.2+ + Laravel 12, Inertia.js 2, React 19, TypeScript 5.7, Tailwind CSS 4, Spatie Laravel Permission, Spatie Laravel Activity Log
+- 008-important-places: Added PHP 8.2.29, Laravel 12 + Laravel Fortify (authentication), Spatie Laravel Permission or equivalent RBAC (for admin access control), Eloquent ORM, Inertia.js 2 (React 19, TypeScript) for admin UI, Tailwind CSS 4 for styling
+- 006-division-of-property-into-subdivision: Added PHP 8.2+ + Laravel 12, Inertia.js 2, React 19, TypeScript 5.7, Tailwind CSS 4
+
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
